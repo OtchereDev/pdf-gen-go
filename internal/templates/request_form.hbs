@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{tailwindcss}}" />
+  </head>
+  <body>
+    <div class="mx-auto max-w-[750px]">
+        <div class="bg-[#fafafa] flex py-4 px-5 justify-between">
+          <div class="">
+            <img src="{{logo}}" class="w-[40%]" alt="logo" />
+            <p class="text-2xl text-[#1E293B] font-semibold mt-5">Examination Request Form</p>
+          </div>
+          <div class="text-[#1E293B] text-xs">
+            <p class="mb-1">Spectra Health</p>
+            <p class="mb-1">#12 Opoku Adjei Ave.</p>
+            <p class="mb-1">North Patasi, Kumasi</p>
+            <p class="mb-1">Tel: 0507676769</p>
+            <p class="mb-1">info@spectrahealthgh.com</p>
+          </div>
+        </div>
+
+        <div>
+            <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden  ring-1 ring-black ring-opacity-5 ">
+                      <table class="min-w-full  divide-gray-300">
+                        <thead class="bg-[#f4f4f4]">
+                          <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#b0bbca] sm:pl-6 w-[33%]">Patient Name</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-[#b0bbca] w-[33%]">Sex</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-[#b0bbca] w-[33%]">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody class="  bg-white">
+                          <tr>
+                            <td class="py-4 pl-4 pr-3 text-sm font-medium border text-[#64748B] sm:pl-6">{{patientName}}</td>
+                            <td class="px-3 py-4 text-sm text-[#64748B] font-medium border">{{sex}}</td>
+                            <td class="px-3 py-4 text-sm text-[#64748B] font-medium border">{{dateFormat date 'dddd, DD MMMM YYYY'}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden  ring-1 ring-black ring-opacity-5 ">
+                      <table class="min-w-full  divide-gray-300">
+                        <thead class="bg-[#f4f4f4]">
+                          <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#b0bbca] sm:pl-6 w-[33%]">Age</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-[#b0bbca] w-[33%]">Mobile Number</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-[#b0bbca] w-[33%]">Address</th>
+                          </tr>
+                        </thead>
+                        <tbody class="  bg-white">
+                          <tr>
+                            <td class="py-4 pl-4 pr-3 text-sm font-medium border text-[#64748B] sm:pl-6">{{age}}</td>
+                            <td class="px-3 py-4 text-sm text-[#64748B] font-medium border">{{phoneNumber}}</td>
+                            <td class="px-3 py-4 text-sm text-[#64748B] font-medium border">{{address}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden  ring-1 ring-black ring-opacity-5 ">
+                      <table class="min-w-full  divide-gray-300">
+                        <thead class="bg-[#f4f4f4]">
+                          <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#b0bbca] sm:pl-6 w-[50%]">Requesting Doctor</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-[#b0bbca] w-[50%]">Requesting Facility</th>
+                          </tr>
+                        </thead>
+                        <tbody class="  bg-white">
+                          <tr>
+                            <td class=" py-4 pl-4 pr-3 text-sm font-medium border text-[#64748B] sm:pl-6">{{requestingDoctor}}</td>
+                            <td class=" px-3 py-4 text-sm text-[#64748B] font-medium border">{{requestingFacility}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden  ring-1 ring-black ring-opacity-5 ">
+                      <table class="min-w-full  divide-gray-300">
+                        <thead class="bg-[#f4f4f4]">
+                          <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#b0bbca] sm:pl-6 w-full">Query</th>
+                          </tr>
+                        </thead>
+                        <tbody class="  bg-white">
+                          <tr>
+                            <td class="py-4 pl-4 pr-3 text-sm font-medium border text-[#64748B] sm:pl-6">{{query}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden  ring-1 ring-black ring-opacity-5 ">
+                      <table class="min-w-full  divide-gray-300">
+                        <thead class="bg-[#f4f4f4]">
+                          <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#b0bbca] sm:pl-6 w-full">Examination Requested</th>
+                          </tr>
+                        </thead>
+                        <tbody class="  bg-white">
+                          <tr>
+                            <td class="py-4 pl-4 pr-3 text-sm font-medium border text-[#64748B] sm:pl-6">
+                                {{examination}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<html lang="en">
+
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{tailwindcss}}" />
+  </head>
+  <body>
+    <div>
+      <div class="bg-[#fafafa] flex py-4 px-5 justify-between">
+        <div class="">
+          <img src="{{logo}}" class="w-[40%]" alt="logo" />
+          <p class="text-2xl text-[#1E293B] font-semibold mt-5">Receipt</p>
+        </div>
+        <div class="text-[#1E293B] text-xs">
+          <p class="mb-1">Spectra Health</p>
+          <p class="mb-1">#12 Opoku Adjei Ave.</p>
+          <p class="mb-1">North Patasi, Kumasi</p>
+          <p class="mb-1">Tel: 0507676769</p>
+          <p class="mb-1">info@spectrahealthgh.com</p>
+        </div>
+      </div>
+
+      <div class="mt-5 px-5">
+        <div class="flex justify-between font-medium mb-1">
+          <p class="text-[#94A3B8]">Customer Name</p>
+          <p class="text-[#1E293B]">{{name}}</p>
+        </div>
+        <div class="flex justify-between font-medium text-sm mb-1">
+          <p class="text-[#94A3B8]">Patient ID</p>
+          <p class="text-[#1E293B]">{{patientId}}</p>
+        </div>
+        <div class="flex justify-between font-medium text-sm mb-1">
+          <p class="text-[#94A3B8]">Payment Date</p>
+          <p class="text-[#1E293B]">{{dateFormat paymentDate "DD/MM/YYYY"}}</p>
+        </div>
+        <div class="flex justify-between font-medium text-sm mb-1">
+          <p class="text-[#94A3B8]">Invoice Number</p>
+          <p class="text-[#1E293B]">{{receiptNumber}}</p>
+        </div>
+        <div class="flex justify-between font-medium text-sm mb-1">
+          <p class="text-[#94A3B8]">Payment Method</p>
+          <p class="text-[#1E293B]">{{paymentMethod}}</p>
+        </div>
+      </div>
+
+      <div class="mt-6 px-5">
+        <table class="min-w-full divide-gray-300">
+          <thead class="border-y-[1.5px] border-dashed border-[#C9D3E2]">
+            <tr>
+              <th
+                scope="col"
+                class="py-3 pl-4 pr-3 text-left text-sm font-semibold sm:pl-6"
+              >
+                Code
+              </th>
+              <th scope="col" class="px-3 py-3 text-left text-sm font-semibold">
+                Description
+              </th>
+              <th scope="col" class="px-3 py-3 text-left text-sm font-semibold">
+                Qty
+              </th>
+              <th scope="col" class="px-3 py-3 text-left text-sm font-semibold">
+                Unit Price (GHS)
+              </th>
+              <th scope="col" class="px-3 py-3 text-left text-sm font-semibold">
+                Amount (GHS)
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-[#cbd5e1]">
+            {{#each paymentItems as |item|}}
+              <tr class="hover:bg-gray-100 cursor-pointer">
+
+                <td class="py-5 pl-4 pr-3 text-sm text-[#1E293B] sm:pl-6">
+                  {{item.code}}
+                </td>
+
+                <td class="px-3 py-5 text-sm text-[#1E293B]">
+                  {{item.description}}
+                </td>
+                <td class="px-3 py-5 text-sm text-[#1E293B]">
+                  {{item.quantity}}
+                </td>
+                <td class="px-3 py-5 text-sm text-[#1E293B]">
+                  {{item.unitPrice}}
+                </td>
+                <td
+                  class="px-3 py-5 text-sm text-[#1E293B]"
+                >{{item.amount}}</td>
+              </tr>
+            {{/each}}
+            {{! <tr class="hover:bg-gray-100 cursor-pointer">
+              <td class="py-5 pl-4 pr-3 text-sm text-[#1E293B] sm:pl-6">
+                REG002
+              </td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">Registration</td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">1</td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">30.00</td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">30.00</td>
+            </tr> }}
+            <tr
+              class="hover:bg-gray-100 bo cursor-pointer border-t-[1.5px] border-dashed border-[#C9D3E2]"
+            >
+              <td
+                class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-[#1E293B] sm:pl-6"
+              >
+                Sub-total
+              </td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">{{subTotal}}</td>
+            </tr>
+            <tr class="hover:bg-gray-100 cursor-pointer">
+              <td
+                class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-[#1E293B] sm:pl-6"
+              >
+                Discount/Waiver
+              </td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]"></td>
+              <td class="px-3 py-5 text-sm text-[#1E293B]">{{discount}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="flex gap-6 mt-8 items-center justify-between">
+          <p class="font-medium">Total Amount</p>
+
+          <p class="text-lg font-bold">GHS {{total}}</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

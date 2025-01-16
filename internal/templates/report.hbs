@@ -1,0 +1,77 @@
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{tailwindcss}}" />
+  </head>
+  <body>
+    <div class="px-10">
+      <div class="flex border-t border-black pt-2">
+        <div class="w-[33.3%]">
+          <p>Report Recipient</p>
+        </div>
+        <div class="w-[33.3%]">
+          <p>Patient Details</p>
+          <p class="font-semibold">{{name}}</p>
+        </div>
+        <div class="w-[33.3%]">
+          <p>DOB / Age:</p>
+          <p>{{dateFormat dob "DD/MM/YYYY"}} <span>{{age}}</span></p>
+          <p>Ref: <span>{{patientId}}</span></p>
+        </div>
+      </div>
+
+      <div class="border-t border-black mt-4 pt-2">
+        <p>Referring Clinician: Dr <span>{{referringDoctor}}</span></p>
+        <p>Referring Facility: <span>{{referringFacility}}</span></p>
+        <p>
+          Clinical Detail:
+          <span>
+            {{{detail}}}
+          </span>
+        </p>
+      </div>
+      <div class="border-t border-black mt-4 pt-2">
+        <p class="font-semibold">
+          Examination procedure:
+          {{procedure}}
+          {{dateFormat examinationDate "DD/MM/YYYY"}}
+        </p>
+      </div>
+
+      <div class="border-t border-black mt-4 pt-2">
+        <h3 class="font-semibold">Findings:</h3>
+        <div>
+          {{{findings}}}
+        </div>
+
+        <h3 class="font-semibold mt-4">Impressions:</h3>
+        <div>{{{impressions}}}</div>
+
+        <div class="mt-12">
+          <p>
+            Authored by:
+            <span class="font-semibold">{{radiologist}}</span>
+          </p>
+          <p class="font-semibold">{{titleOnReport}}</p>
+
+          <div class="mt-6">
+            <p>
+              Verified by:
+              <span class="font-semibold">{{approvedBy}}</span>
+              at
+              {{dateFormat verifiedAt "DD/MM/YYYY HH:mm"}}
+            </p>
+            <p class="font-semibold">{{approverTitle}}</p>
+          </div>
+        </div>
+
+        <p class="mt-12">Thank you very much for the referral</p>
+      </div>
+    </div>
+  </body>
+</html>
