@@ -82,8 +82,8 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 				marginTop = 0
 				marginBottom = 0
 			} else {
-				marginTop = 130
-				marginBottom = 100
+				marginTop = 130 / 96
+				marginBottom = 100 / 96
 			}
 
 			buf, _, err = page.PrintToPDF().WithPrintBackground(true).
