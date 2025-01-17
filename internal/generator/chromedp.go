@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/aymerick/raymond"
 	"github.com/chromedp/cdproto/page"
@@ -35,18 +37,14 @@ func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (st
 }
 
 func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
-	// Compile the template with the given data
-	htmlContent, err := c.CompileTemplate(p.TemplateName, p.Data)
+	html, err := c.CompileTemplate(p.TemplateName, p.Data)
 	if err != nil {
 		return "", err
 	}
 
-	// Create a Chrome browser context
-	ctx, cancel := chromedp.NewContext(context.Background())
+	ctx, cancel := chromedp.NewContext(context.Background(), chromedp.WithDebugf(log.Printf))
 	defer cancel()
 
-	// Configure the PDF options
-	var pdfBuffer []byte
 	headerTemplate := ""
 	footerTemplate := ""
 
@@ -69,10 +67,16 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 			</p>
 		</div>`
 
-	err = chromedp.Run(ctx,
-		chromedp.Navigate("data:text/html,"+htmlContent), // Set the HTML content
-		// chromedp.Emulate(device.),
+	var buf []byte
+
+	if err := chromedp.Run(ctx,
+		// the navigation will trigger the "page.EventLoadEventFired" event too,
+		// so we should add the listener after the navigation.
+		chromedp.Navigate("about:blank"),
+		// set the page content and wait until the page is loaded (including its resources).
+		chromedp.ActionFunc(actionLoadHTMLContent(html)),
 		chromedp.ActionFunc(func(ctx context.Context) error {
+
 			var marginTop, marginBottom float64
 			if p.RemoveMargins {
 				marginTop = 0
@@ -82,18 +86,58 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 				marginBottom = 100
 			}
 
-			pdfBuffer, _, err = page.PrintToPDF().WithPrintBackground(true).
+			buf, _, err = page.PrintToPDF().WithPrintBackground(true).
 				WithMarginTop(marginTop).WithMarginBottom(marginBottom).
 				WithDisplayHeaderFooter(p.WithHeader).WithHeaderTemplate(headerTemplate).
 				WithFooterTemplate(footerTemplate).Do(ctx)
 
-			os.WriteFile("sample.pdf", pdfBuffer, 0644)
-			return err
+			if err != nil {
+				return err
+			}
+			return os.WriteFile("sample.pdf", buf, 0644)
 		}),
-	)
-	if err != nil {
-		return "", fmt.Errorf("failed to generate PDF: %w", err)
+	); err != nil {
+		log.Fatal(err)
 	}
+	return base64.StdEncoding.EncodeToString(buf), nil
+}
 
-	return base64.StdEncoding.EncodeToString(pdfBuffer), nil
+func actionLoadHTMLContent(html string) chromedp.ActionFunc {
+	return func(ctx context.Context) error {
+		isLoaded, isSetLock := false, sync.Mutex{}
+		listenerCtx, cancel := context.WithCancel(ctx)
+		defer cancel()
+
+		chromedp.ListenTarget(listenerCtx, func(ev interface{}) {
+			if _, ok := ev.(*page.EventLoadEventFired); ok {
+				// stop listener
+				cancel()
+
+				isSetLock.Lock()
+				isLoaded = true
+				isSetLock.Unlock()
+			}
+		})
+
+		frameTree, err := page.GetFrameTree().Do(ctx)
+		if err != nil {
+			return err
+		}
+
+		if err := page.SetDocumentContent(frameTree.Frame.ID, html).Do(ctx); err != nil {
+			return err
+		}
+
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-listenerCtx.Done():
+			isSetLock.Lock()
+			defer isSetLock.Unlock()
+			if isLoaded {
+				return nil
+			}
+			return listenerCtx.Err()
+		}
+	}
 }
