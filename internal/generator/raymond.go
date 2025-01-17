@@ -1,6 +1,8 @@
 package generator
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -46,4 +48,18 @@ func RegisterHelpers() {
 		// Format the date
 		return parsedTime.Format(goFormat)
 	})
+}
+
+func RegisterParials() error {
+	templatePath := filepath.Join("..", "templates", "tailwindcss.hbs")
+
+	cssPartial, err := os.ReadFile(templatePath)
+	if err != nil {
+		return err
+	}
+
+	// Register the CSS partial
+	raymond.RegisterPartial("styles", string(cssPartial))
+
+	return nil
 }

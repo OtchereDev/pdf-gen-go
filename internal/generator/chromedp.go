@@ -19,6 +19,7 @@ type ChromeDp struct{}
 func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (string, error) {
 
 	RegisterHelpers()
+	err := RegisterParials()
 
 	templatePath := filepath.Join("..", "templates", name+".hbs")
 
