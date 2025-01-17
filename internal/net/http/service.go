@@ -2,11 +2,17 @@ package http
 
 import "github.com/OtchereDev/pdf-gen-go/internal/generator"
 
+const (
+	ReceiptTemplate     = "receipt"
+	RequestFormTemplate = "request_form"
+	ReportTemplate      = "report"
+)
+
 func GenerateReceipt(d ReceiptData, g generator.Generator) (r string, err error) {
 	r, err = g.GeneratePDF(generator.GenerationParam{
 		WithHeader:    false,
 		RemoveMargins: true,
-		TemplateName:  "receipt",
+		TemplateName:  ReceiptTemplate,
 		Data: map[string]interface{}{
 			"fileName":      d.fileName,
 			"name":          d.name,
@@ -27,7 +33,7 @@ func GenerateReceipt(d ReceiptData, g generator.Generator) (r string, err error)
 func GenerateRequestForm(d RequestFormData, g generator.Generator) (r string, err error) {
 	r, err = g.GeneratePDF(generator.GenerationParam{
 		WithHeader:   true,
-		TemplateName: "request_form",
+		TemplateName: RequestFormTemplate,
 		Data: map[string]interface{}{
 			"patientName":        d.patientName,
 			"sex":                d.sex,
@@ -49,7 +55,7 @@ func GenerateRequestForm(d RequestFormData, g generator.Generator) (r string, er
 func GenerateReport(d ReportData, g generator.Generator) (r string, err error) {
 	r, err = g.GeneratePDF(generator.GenerationParam{
 		WithHeader:   d.withHeader,
-		TemplateName: "request_form",
+		TemplateName: ReportTemplate,
 		Data: map[string]interface{}{
 			"name":              d.name,
 			"dob":               d.dob,
