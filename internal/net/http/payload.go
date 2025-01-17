@@ -33,7 +33,7 @@ type RequestFormData struct {
 	fileName           string
 }
 
-type IReportData struct {
+type ReportData struct {
 	name              string
 	dob               string
 	age               string
@@ -51,5 +51,5 @@ type IReportData struct {
 	findings          string
 	approvedBy        string
 	approverTitle     string
-	withHeader        string
+	withHeader        bool
 }
