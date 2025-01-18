@@ -63,17 +63,21 @@ func TestCanOpenTemplate(t *testing.T) {
 func TestCompileTemplate(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
 		var (
-			is   = is.NewRelaxed(t)
-			name = "invoice"
+			is = is.NewRelaxed(t)
+			g  = newGenerator(t)
 
-			g = newGenerator(t)
-
+			name = "request_form"
 			data = map[string]interface{}{
-				"name":            "John Doe",
-				"date":            time.Now(),
-				"tailwindcss":     "http://localhost:3000/css/styles.css",
-				"logo":            "http://localhost:3000/images/logo.png",
-				"examinationDate": "2025-01-20",
+				"patientName":        "Oliver Otcher",
+				"sex":                "M",
+				"date":               "2012-04-23T18:25:43.511Z",
+				"age":                "21",
+				"phoneNumber":        "052394748393",
+				"address":            "Anywhere",
+				"requestingDoctor":   "Dr tesr",
+				"requestingFacility": "Test fac",
+				"examination":        "ECR",
+				"query":              "Location",
 			}
 		)
 
