@@ -21,7 +21,7 @@ RUN go mod download
 
 # Copy application source code and build
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app ./cmd 
 
 # Default command to run the application
 CMD ["./app"]
