@@ -96,7 +96,7 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 			if err != nil {
 				return err
 			}
-			return os.WriteFile("sample.pdf", buf, 0644)
+			return nil
 
 		}),
 	); err != nil {
