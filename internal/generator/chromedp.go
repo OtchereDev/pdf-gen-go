@@ -16,10 +16,14 @@ import (
 
 type ChromeDp struct{}
 
-func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (string, error) {
-
+func (c *ChromeDp) RegisterAsset() error {
 	RegisterHelpers()
 	err := RegisterParials()
+
+	return err
+}
+
+func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (string, error) {
 
 	templatePath := filepath.Join("..", "templates", name+".hbs")
 
@@ -27,6 +31,8 @@ func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (st
 	if err != nil {
 		return "", fmt.Errorf("failed to read template file: %w", err)
 	}
+
+	data["logo"] = LOGO
 
 	// Compile the template with Raymond
 	result, err := raymond.Render(string(tmplContent), data)
@@ -38,6 +44,7 @@ func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (st
 }
 
 func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
+
 	html, err := c.CompileTemplate(p.TemplateName, p.Data)
 	if err != nil {
 		return "", err
@@ -50,10 +57,7 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 	footerTemplate := ""
 
 	if p.WithHeader {
-		headerTemplate = `
-		<div style="display: flex; justify-content: flex-end; padding-left: 40px; padding-right: 40px;" class="flex justify-end px-10">
-			<img src="LOGO_URL" style="width: 30%" alt="logo" />
-		</div>`
+		headerTemplate = fmt.Sprintf("<div style='display: flex; justify-content: flex-end; padding-left: 40px; padding-right: 40px;' class='flex justify-end px-10'><img src='%s' style='width: 30%%' alt='logo' /></div>", LOGO)
 	}
 
 	footerTemplate = `
@@ -78,24 +82,22 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 		chromedp.ActionFunc(actionLoadHTMLContent(html)),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 
-			var marginTop, marginBottom float64
-			if p.RemoveMargins {
-				marginTop = 0
-				marginBottom = 0
-			} else {
-				marginTop = 130 / 96
-				marginBottom = 100 / 96
+			q := page.PrintToPDF().WithPrintBackground(true).
+				WithDisplayHeaderFooter(p.WithHeader).WithHeaderTemplate(headerTemplate).
+				WithFooterTemplate(footerTemplate).WithPaperWidth(8.27)
+
+			if !p.RemoveMargins {
+				q = q.WithMarginTop(130 / 96).WithMarginBottom(100 / 96).
+					WithMarginLeft(0).WithMarginRight(0)
 			}
 
-			buf, _, err = page.PrintToPDF().WithPrintBackground(true).
-				WithMarginTop(marginTop).WithMarginBottom(marginBottom).
-				WithDisplayHeaderFooter(p.WithHeader).WithHeaderTemplate(headerTemplate).
-				WithFooterTemplate(footerTemplate).Do(ctx)
+			buf, _, err = q.Do(ctx)
 
 			if err != nil {
 				return err
 			}
 			return os.WriteFile("sample.pdf", buf, 0644)
+
 		}),
 	); err != nil {
 		log.Fatal(err)
@@ -141,4 +143,14 @@ func actionLoadHTMLContent(html string) chromedp.ActionFunc {
 			return listenerCtx.Err()
 		}
 	}
+}
+
+func Connect() (c *ChromeDp, err error) {
+	a := ChromeDp{}
+
+	err = c.RegisterAsset()
+
+	c = &a
+
+	return
 }
