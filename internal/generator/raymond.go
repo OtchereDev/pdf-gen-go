@@ -1,10 +1,9 @@
 package generator
 
 import (
-	"os"
-	"path/filepath"
 	"time"
 
+	"github.com/OtchereDev/pdf-gen-go/internal/templates"
 	"github.com/aymerick/raymond"
 )
 
@@ -35,9 +34,8 @@ func RegisterHelpers() {
 }
 
 func RegisterParials() error {
-	templatePath := filepath.Join("..", "templates", "tailwindcss.hbs")
 
-	cssPartial, err := os.ReadFile(templatePath)
+	cssPartial, err := templates.TemplateFiles.ReadFile("template/tailwindcss.hbs")
 	if err != nil {
 		return err
 	}

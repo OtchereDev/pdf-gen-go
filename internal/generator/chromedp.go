@@ -5,10 +5,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"sync"
 
+	"github.com/OtchereDev/pdf-gen-go/internal/templates"
 	"github.com/aymerick/raymond"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
@@ -24,10 +23,8 @@ func (c *ChromeDp) RegisterAsset() error {
 }
 
 func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (string, error) {
+	content, err := templates.TemplateFiles.ReadFile(fmt.Sprintf("template/%s.hbs", name))
 
-	templatePath := filepath.Join("..", "templates", name+".hbs")
-
-	tmplContent, err := os.ReadFile(templatePath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read template file: %w", err)
 	}
@@ -35,7 +32,7 @@ func (c *ChromeDp) CompileTemplate(name string, data map[string]interface{}) (st
 	data["logo"] = LOGO
 
 	// Compile the template with Raymond
-	result, err := raymond.Render(string(tmplContent), data)
+	result, err := raymond.Render(string(content), data)
 	if err != nil {
 		return "", fmt.Errorf("failed to render template: %w", err)
 	}
