@@ -75,7 +75,7 @@ func (c *ChromeDp) GeneratePDF(p GenerationParam) (string, error) {
 		chromedp.Flag("password-store", "basic"),
 		chromedp.Flag("use-mock-keychain", true),
 	)...)
-	ctx, cancel := chromedp.NewContext(allocatorCtx, chromedp.WithDebugf(log.Printf))
+	ctx, cancel := chromedp.NewContext(allocatorCtx)
 	defer cancel()
 
 	headerTemplate := ""
