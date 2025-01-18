@@ -3,36 +3,20 @@ package generator
 import (
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/aymerick/raymond"
 )
 
-func convertMomentToGoFormat(format string) string {
-	replacements := map[string]string{
-		"dddd": "Monday",  // Full weekday name
-		"ddd":  "Mon",     // Short weekday name
-		"DD":   "02",      // Day of the month (zero-padded)
-		"D":    "2",       // Day of the month
-		"MMMM": "January", // Full month name
-		"MMM":  "Jan",     // Short month name
-		"MM":   "01",      // Month (zero-padded)
-		"M":    "1",       // Month
-		"YYYY": "2006",    // 4-digit year
-		"YY":   "06",      // 2-digit year
-		"HH":   "15",      // Hour (24-hour clock, zero-padded)
-		"H":    "3",       // Hour (24-hour clock)
-		"mm":   "04",      // Minutes (zero-padded)
-		"m":    "4",       // Minutes
-		"ss":   "05",      // Seconds (zero-padded)
-		"s":    "5",       // Seconds
+func ConvertMomentToGoFormat(format string) string {
+	formats := map[string]string{
+		"DD-MM-YYYY":         "02-01-2006",
+		"DD/MM/YYYY":         "02/01/2006",
+		"DD/MM/YYYY HH:mm":   "02/01/2006 15:04",
+		"dddd, DD MMMM YYYY": "Monday, 02 January 2006",
 	}
 
-	for momentFormat, goFormat := range replacements {
-		format = strings.ReplaceAll(format, momentFormat, goFormat)
-	}
-	return format
+	return formats[format]
 }
 
 func RegisterHelpers() {
@@ -43,7 +27,7 @@ func RegisterHelpers() {
 		}
 
 		// Convert moment.js-style format to Go format
-		goFormat := convertMomentToGoFormat(format)
+		goFormat := ConvertMomentToGoFormat(format)
 
 		// Format the date
 		return parsedTime.Format(goFormat)
